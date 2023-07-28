@@ -1,14 +1,15 @@
-const customAPIError= require('../errors/custom-error');
-const errorHandlerMiddleware = (err, req,res,next)=>{
-    console.log(err);
-    if(err instanceof customAPIError)
-    {
-        return res.status(err.statusCode).json({msg: err.message})
-    }
-    return res.status(500).send('Something went wrong try again later');
+const { CustomAPIError } = require('../errors')
+const { StatusCodes } = require('http-status-codes')
+const errorHandlerMiddleware = (err, req, res, next) => {
+  if (err instanceof CustomAPIError) {
+    return res.status(err.statusCode).json({ msg: err.message })
+  }
+  return res
+    .status(StatusCodes.INTERNAL_SERVER_ERROR)
+    .send('Something went wrong try again later')
 }
 
-module.exports=errorHandlerMiddleware
+module.exports = errorHandlerMiddleware
 
 // The code defines an error handling middleware function errorHandlerMiddleware, which takes four parameters: err, req, res, and next. In Express.js, error-handling middleware is identified by the presence of four parameters.
 
